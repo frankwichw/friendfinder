@@ -3,7 +3,9 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
 
+// saving express to a variable
 var app = express();
+// creating port variable, 3000 for localhost and the procces.env to use whatever port heroku uses
 var PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing

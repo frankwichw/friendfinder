@@ -7,9 +7,9 @@
 		Survey
 	</title>
 
-	<!-- <link rel="stylesheet" type="text/css" href="assets/css/reset.css"> -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	
 </head>
 <body>
@@ -18,17 +18,18 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+				<h5 class="modal-title" id="exampleModalLabel">Your Match!</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-				...
+				<!-- body goes here -->
+				<h1 id='match-name'></h1>
+				<img src='' id='match-photo' width='400'>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -38,6 +39,7 @@
 	<h1>Survey Questions</h1>
 	<hr>
 	<h2>About You</h2>
+<form>
 	<h4>Name (Required)</h4>
 	<input id='your-name' type='text' class='form-control'>
 	<h4>Link to photo image (Required)</h4>
@@ -143,8 +145,9 @@
 		<option value='4'> 4 </option>
 		<option value='5'> 5 (Strongly agree)</option>
 	</select>
+</form>
 	<hr>
-	<button type='submit' class='btn btn-lg btn-primary btn-block' id='submit' data-toggle="modal" data-target="#mymodal">Submit</button>
+	<button type='submit' class='btn btn-lg btn-primary btn-block' id='submit'>Submit</button>
 	<hr>
 	<footer class='footer'>
 		<a href='/api/friends'>API Friends List</a> | <a href='https://github.com/frankwichw/friendfinder'>GitHub Repo</a>
@@ -154,9 +157,14 @@
 <script>
 	// on submit button click, make an object out of the data that we 
 	$("#submit").on("click", function(event) {
-	  event.preventDefault();
-
-      var newFriend = {
+	// preventing default (page reload)  
+	event.preventDefault();
+	// i'm sure there's a better way to validate this form but here i am :)
+	if ($("#your-name").val().length < 1 || $("#your-photo").val().length < 1 || $("#q1").val().length < 1 || $("#q2").val().length < 1 || $("#q3").val().length < 1 || $("#q4").val().length < 1 || $("#q5").val().length < 1 || $("#q6").val().length < 1 || $("#q7").val().length < 1 || $("#q8").val().length < 1 || $("#q9").val().length < 1 || $("#q10").val().length < 1){
+		alert("Please fill in all form fields!");
+	} else {
+		// creating object out of user's input
+		var newFriend = {
         name: $("#your-name").val().trim(),
         photo: $("#your-photo").val().trim(),
 		scores: [
@@ -172,20 +180,20 @@
 			$("#q10").val()
 	  	]
 	  };
-
+	// post route to send the created object to /api/friends
       $.post("/api/friends", newFriend)
-      .then(function(data) {
-		//console.log(newFriend);
+      .then(function(data, response) {
+		// getting response from post route on apiroutes.js and using the returned object + jquery to put the match on the modal
+		$("#match-name").text(data.name);
+		$("#match-photo").attr("src", data.photo);
+		// showing the modal
+		$("#mymodal").modal("show");
 	  });
-	  
-	  $.ajax({
-      url: "/api/friends",
-      method: 'GET'
-      }).done(function(response) {
-      	console.log(response);
-      });
 
-    });
+
+	}
+	});
+	
 </script>
 </body>
 </html>

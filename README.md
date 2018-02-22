@@ -1,5 +1,5 @@
 # Friend Finder
-Friend Finder is an app that prompts users to answer 10 simple survey questions, along with providing their name and a photo of themselves. Once they submit their data, they will be matched with a friend who answered similarly in the survey.
+Friend Finder is an app that prompts users to answer 10 survey questions, along with providing their name and a photo of themselves. Once they submit their data, they will be matched with a friend who answered similarly in the survey.
 
 ## Getting Started
 
